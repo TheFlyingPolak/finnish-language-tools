@@ -37,21 +37,23 @@ NUMBER_LIST = ["singular", "plural"]
 
 
 def get_random_case(word: str) -> dict[str, str] | None:
-    analysis = v.analyze(word)
+    analysis_list = v.analyze(word)
+    if not analysis_list:
+        return None
+    analysis = next(a for a in analysis_list if a["BASEFORM"] == word)
     if not analysis:
         return None
-    word_baseform = analysis[0]["BASEFORM"]
-    word_class = analysis[0]["CLASS"]
+    word_class = analysis["CLASS"]
 
     match word_class:
         case "nimisana":
-            return {"BASEFORM": word_baseform, "CLASS": word_class, "NUMBER": choice(NUMBER_LIST), "SIJAMUOTO": choice(SIJAMUOTO_LIST)}
+            return {"BASEFORM": word, "CLASS": word_class, "NUMBER": choice(NUMBER_LIST), "SIJAMUOTO": choice(SIJAMUOTO_LIST)}
         case "teonsana":
-            return {}
+            return None
         case "laatusana":
-            return {}
+            return None
 
-    return {}
+    return None
 
 def verify_word(word: str, target_form: dict[str, str]) -> bool:
     analysis = v.analyze(word)
