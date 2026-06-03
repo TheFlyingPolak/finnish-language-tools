@@ -3,16 +3,26 @@ from random import choice
 from random_finnish_word import get_random_word
 import sys
 
-Voikko.setLibrarySearchPath("c:/Voikko")
-v = Voikko(u"fi")
+v = Voikko("fi")
 SIJAMUOTO = "SIJAMUOTO"
 NUMBER = "NUMBER"
 
 SIJAMUOTO_LIST = [
-    "nimento", "omanto", "osanto", "olento", "tulento", "kohdanto",
-    "sisaolento", "sisaeronto", "sisatulento",
-    "ulkoolento", "ulkoeronto", "ulkotulento",
-    "vajanto", "seuranto", "keinonto",
+    "nimento",
+    "omanto",
+    "osanto",
+    "olento",
+    "tulento",
+    "kohdanto",
+    "sisaolento",
+    "sisaeronto",
+    "sisatulento",
+    "ulkoolento",
+    "ulkoeronto",
+    "ulkotulento",
+    "vajanto",
+    "seuranto",
+    "keinonto",
 ]
 
 SIJAMUOTO_MAP = {
@@ -47,7 +57,12 @@ def get_random_case(word: str) -> dict[str, str] | None:
 
     match word_class:
         case "nimisana":
-            return {"BASEFORM": word, "CLASS": word_class, "NUMBER": choice(NUMBER_LIST), "SIJAMUOTO": choice(SIJAMUOTO_LIST)}
+            return {
+                "BASEFORM": word,
+                "CLASS": word_class,
+                "NUMBER": choice(NUMBER_LIST),
+                "SIJAMUOTO": choice(SIJAMUOTO_LIST),
+            }
         case "teonsana":
             return None
         case "laatusana":
@@ -55,11 +70,16 @@ def get_random_case(word: str) -> dict[str, str] | None:
 
     return None
 
+
 def verify_word(word: str, target_form: dict[str, str]) -> bool:
     analysis = v.analyze(word)
     target_sijamuoto = target_form[SIJAMUOTO]
     target_number = target_form[NUMBER]
-    return any(a[SIJAMUOTO] == target_sijamuoto and a[NUMBER] == target_number for a in analysis)
+    return any(
+        a[SIJAMUOTO] == target_sijamuoto and a[NUMBER] == target_number
+        for a in analysis
+    )
+
 
 def main():
     if len(sys.argv) <= 1:
@@ -70,7 +90,9 @@ def main():
     right_count = 0
     wrong_count = 0
 
-    print("Welcome to the Finnish word inflection exercise. At any point, type 'end' to finish and see your score.")
+    print(
+        "Welcome to the Finnish word inflection exercise. At any point, type 'end' to finish and see your score."
+    )
 
     while True:
         random_word = get_random_word(dictionary_path, "noun")
@@ -97,5 +119,6 @@ def main():
             wrong_count += 1
             print("Incorrect!")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
