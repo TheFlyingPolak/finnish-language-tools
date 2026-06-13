@@ -79,19 +79,10 @@ def get_random_case(word: str) -> dict[str, str] | None:
 
 def verify_word(word: str, target_form: dict[str, str]) -> bool:
     analysis = v.analyze(word)
-    print("Word", word)
-    print("Target form", target_form)
     return any(_verify_word_helper(a, target_form) for a in analysis)
-    # target_sijamuoto = target_form[SIJAMUOTO]
-    # target_number = target_form[NUMBER]
-    # return any(
-    #    a[SIJAMUOTO] == target_sijamuoto and a[NUMBER] == target_number
-    #    for a in analysis
-    # )
 
 
 def _verify_word_helper(analysis: dict, target_form: dict[str, str]):
-    print("Analysis", {k: analysis[k] for k in target_form.keys()})
     for key, value in target_form.items():
         if key not in analysis or analysis[key] != value:
             return False
@@ -147,7 +138,6 @@ def main():
         current_word_class = (
             choice(["noun", "verb"]) if word_class == "" else word_class
         )
-        print("word class", current_word_class)
         # TODO: do not return word from dictionary which itself has no analysis result from voikko
         random_word = get_random_word(dictionary_path, current_word_class)
         target_form = get_random_case(random_word)
